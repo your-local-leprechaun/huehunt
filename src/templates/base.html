@@ -12,9 +12,8 @@
     <a href="/" class="logo">Hue Hunt</a>
     <nav>
       {% if session.get('username') %}
-        <span class="username">{{ session['username'] }}</span>
+        <a href="/profile" class="username">{{ session['username'] }}</a>
         <span class="streak" title="Current streak">🔥 {{ session.get('streak', 0) }}</span>
-        <a href="/logout" class="btn btn-ghost">Log out</a>
       {% else %}
         <a href="/login" class="btn btn-ghost">Sign in</a>
       {% endif %}

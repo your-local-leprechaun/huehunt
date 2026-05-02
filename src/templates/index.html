@@ -46,9 +46,12 @@
       </button>
     </div>
 
-    <div class="camera-controls hidden" id="controls-preview">
-      <button class="cam-btn cam-btn--retake" id="camera-retake">Retake</button>
-      <button class="cam-btn cam-btn--use" id="camera-use">Use Photo</button>
+    <div class="camera-controls camera-controls--preview hidden" id="controls-preview">
+      <input class="camera-alt-input" id="camera-alt" type="text" placeholder="Describe your photo…" maxlength="120" autocomplete="off" />
+      <div class="camera-preview-actions">
+        <button class="cam-btn cam-btn--retake" id="camera-retake">Retake</button>
+        <button class="cam-btn cam-btn--use" id="camera-use">Submit</button>
+      </div>
     </div>
 
   </div>
@@ -122,11 +125,30 @@
     startCamera();
   });
 
-  document.getElementById('camera-use').addEventListener('click', () => {
+  document.getElementById('camera-use').addEventListener('click', async () => {
     const imageData = canvas.toDataURL('image/jpeg', 0.9);
-    // TODO: submit imageData to server
-    console.log('Photo captured, ready to submit', imageData.slice(0, 50));
-    closeCamera();
+    const altText   = document.getElementById('camera-alt').value.trim();
+    const useBtn    = document.getElementById('camera-use');
+
+    useBtn.textContent = 'Uploading…';
+    useBtn.disabled = true;
+
+    try {
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: imageData, alt_text: altText }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Upload failed');
+      closeCamera();
+      // TODO: show confirmation / update UI
+      console.log('Submitted:', json.post_id, json.image_url);
+    } catch (err) {
+      alert('Could not submit: ' + err.message);
+      useBtn.textContent = 'Submit';
+      useBtn.disabled = false;
+    }
   });
 </script>
 {% endblock %}

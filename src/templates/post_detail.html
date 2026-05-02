@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Post — Hue Hunt{% endblock %}
+
+{% block content %}
+<div class="post-detail">
+  <a href="/profile" class="post-back">← Back</a>
+
+  <div class="post-detail-img-wrap">
+    <img
+      src="{{ post.image_url }}"
+      alt="{{ post.alt_text or 'Hue Hunt submission' }}"
+      class="post-detail-img"
+    />
+  </div>
+
+  <div class="post-detail-meta">
+    <span class="post-detail-date">
+      {{ post.date.strftime('%B %d, %Y') if post.date else '' }}
+    </span>
+    {% if post.challenge %}
+      <span class="post-detail-challenge">{{ post.challenge }}</span>
+    {% endif %}
+  </div>
+
+  {% if post.alt_text %}
+    <p class="post-detail-description">{{ post.alt_text }}</p>
+  {% endif %}
+</div>
+{% endblock %}

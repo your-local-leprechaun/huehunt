@@ -24,3 +24,32 @@ class model:
 
     def upsert_user(self, user_id: str, data: dict) -> None:
         self.db.collection("users").document(user_id).set(data, merge=True)
+
+    def create_post(self, user_id: str, data: dict) -> str:
+        _, ref = (
+            self.db.collection("users")
+            .document(user_id)
+            .collection("posts")
+            .add(data)
+        )
+        return ref.id
+
+    def get_post(self, user_id: str, post_id: str) -> dict | None:
+        doc = (
+            self.db.collection("users")
+            .document(user_id)
+            .collection("posts")
+            .document(post_id)
+            .get()
+        )
+        return {"id": doc.id, **doc.to_dict()} if doc.exists else None
+
+    def get_user_posts(self, user_id: str) -> list[dict]:
+        docs = (
+            self.db.collection("users")
+            .document(user_id)
+            .collection("posts")
+            .order_by("date", direction=firestore.Query.DESCENDING)
+            .stream()
+        )
+        return [{"id": doc.id, **doc.to_dict()} for doc in docs]
