@@ -31,7 +31,7 @@
         data-id="{{ post.id }}"
         data-img="{{ post.image_url }}"
         data-alt="{{ post.alt_text or '' }}"
-        data-date="{{ post.date.strftime('%B %d, %Y') if post.date else '' }}"
+        data-date="{{ post.challenge_date | format_date }}"
         data-challenge="{{ post.challenge or '' }}"
       >
         <img
@@ -41,7 +41,7 @@
           loading="lazy"
         />
         <div class="post-tile-meta">
-          {{ post.date.strftime('%b %d') if post.date else '' }}
+          {{ post.challenge_date | format_date('%b %d') }}
         </div>
       </button>
     {% endfor %}

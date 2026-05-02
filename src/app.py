@@ -16,6 +16,14 @@ app.register_blueprint(submit_bp)
 model = db.get_model()
 
 
+@app.template_filter("format_date")
+def format_date(iso_str: str, fmt: str = "%B %d, %Y") -> str:
+    try:
+        return date.fromisoformat(iso_str).strftime(fmt) if iso_str else ""
+    except (ValueError, AttributeError):
+        return ""
+
+
 @app.template_filter("text_color")
 def text_color(hex_color: str) -> str:
     """Return #000 or #fff depending on which is more readable on the given background."""
@@ -30,15 +38,13 @@ def text_color(hex_color: str) -> str:
 
 @app.route("/")
 def index():
-    from flask import session
-    today = date.today().isoformat()
+    from flask import request, session
+    today = request.cookies.get("local_date") or date.today().isoformat()
     challenge = model.get_or_create_challenge(today)
-    submitted = (
-        model.has_submitted_today(session["user_id"], today)
-        if session.get("user_id") else False
-    )
+    user = model.get_user(session["user_id"]) if session.get("user_id") else None
+    submitted = user and user.get("last_submitted_date") == today
     if submitted:
-        submissions = model.get_today_submissions(today)
+        submissions = model.get_recent_submissions()
         return render_template("gallery.html", today=today, challenge=challenge, submissions=submissions)
     return render_template("index.html", today=today, challenge=challenge)
 

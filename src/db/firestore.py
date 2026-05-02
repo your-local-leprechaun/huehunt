@@ -82,11 +82,11 @@ class model:
         )
         return {"id": doc.id, **doc.to_dict()} if doc.exists else None
 
-    def get_today_submissions(self, today: str) -> list[dict]:
+    def get_recent_submissions(self, limit: int = 50) -> list[dict]:
         docs = (
             self.db.collection_group("posts")
-            .where(filter=FieldFilter("challenge_date", "==", today))
             .order_by("date", direction=firestore.Query.DESCENDING)
+            .limit(limit)
             .stream()
         )
         return [{"id": doc.id, **doc.to_dict()} for doc in docs]

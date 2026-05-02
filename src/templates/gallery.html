@@ -14,7 +14,7 @@
           {% endif %}
           {% set chip_color = post.challenge or challenge.color_hex %}
           <span class="feed-color-chip" style="background-color: {{ chip_color }}; color: {{ chip_color | text_color }};">{{ chip_color }}</span>
-          <span class="feed-date">{{ post.date.strftime('%b %d, %Y') if post.date else '' }}</span>
+          <span class="feed-date">{{ post.challenge_date | format_date('%b %d, %Y') }}</span>
         </div>
         <img
           src="{{ post.image_url }}"

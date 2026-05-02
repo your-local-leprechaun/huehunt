@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Hue Hunt{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script>
+    const _today = new Date().toLocaleDateString('en-CA');
+    if (!document.cookie.split(';').some(c => c.trim() === 'local_date=' + _today)) {
+      document.cookie = 'local_date=' + _today + ';path=/;SameSite=Lax';
+      location.reload();
+    }
+  </script>
 </head>
 <body>
   {% block header %}

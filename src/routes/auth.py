@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 from pathlib import Path
 
@@ -9,14 +10,20 @@ from werkzeug.security import check_password_hash, generate_password_hash
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
 
-_creds_path = Path(__file__).parent.parent.parent / "oauth-creds.json"
-_raw = json.loads(_creds_path.read_text())
-_creds = _raw.get("web", _raw)
+_client_id = os.environ.get("GOOGLE_CLIENT_ID")
+_client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+
+if not (_client_id and _client_secret):
+    _creds_path = Path(__file__).parent.parent.parent / "oauth-creds.json"
+    _raw = json.loads(_creds_path.read_text())
+    _creds = _raw.get("web", _raw)
+    _client_id = _creds["client_id"]
+    _client_secret = _creds["client_secret"]
 
 google = oauth.register(
     name="google",
-    client_id=_creds["client_id"],
-    client_secret=_creds["client_secret"],
+    client_id=_client_id,
+    client_secret=_client_secret,
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
     client_kwargs={"scope": "openid email profile"},
 )
