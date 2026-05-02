@@ -27,6 +27,18 @@ class model:
         doc = self.db.collection("users").document(user_id).get()
         return doc.to_dict() if doc.exists else None
 
+    def get_user_by_username(self, username: str) -> tuple[str, dict] | None:
+        """Returns (user_id, data) or None."""
+        docs = list(
+            self.db.collection("users")
+            .where(filter=FieldFilter("username", "==", username))
+            .limit(1)
+            .stream()
+        )
+        if docs:
+            return docs[0].id, docs[0].to_dict()
+        return None
+
     def get_user_by_email(self, email: str) -> tuple[str, dict] | None:
         """Returns (user_id, data) or None."""
         docs = list(

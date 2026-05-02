@@ -1,19 +1,12 @@
 {% extends "base.html" %}
-{% block title %}{{ session['username'] }} — Hue Hunt{% endblock %}
+{% block title %}{{ profile_user.username }} — Hue Hunt{% endblock %}
 
 {% block content %}
 <div class="profile-header">
   <div class="profile-info">
-    <h1 class="profile-username">{{ session['username'] }}</h1>
-    <span class="profile-streak">🔥 {{ session.get('streak', 0) }} day streak</span>
+    <h1 class="profile-username">{{ profile_user.username }}</h1>
+    <span class="profile-streak">🔥 {{ profile_user.get('streak', 0) }} day streak</span>
   </div>
-  <a href="/logout" class="btn-logout" aria-label="Log out" title="Log out" style="margin-left:auto">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-      <polyline points="16 17 21 12 16 7"/>
-      <line x1="21" y1="12" x2="9" y2="12"/>
-    </svg>
-  </a>
 </div>
 
 <div class="profile-stats">
@@ -49,11 +42,10 @@
 {% else %}
   <div class="empty-state">
     <p>No posts yet.</p>
-    <a href="/" class="btn btn-primary" style="margin-top:1rem">Take today's photo</a>
   </div>
 {% endif %}
 
-{# ── Post modal ── #}
+{# ── Post modal (view-only) ── #}
 <div class="post-modal hidden" id="post-modal" role="dialog" aria-modal="true">
   <div class="post-modal-backdrop" id="modal-backdrop"></div>
   <div class="post-modal-card" id="modal-card">
@@ -65,7 +57,6 @@
         <span class="post-detail-chip" id="modal-chip"></span>
       </div>
       <p class="post-detail-description" id="modal-desc"></p>
-      <button class="btn-delete" id="modal-delete">Delete post</button>
     </div>
   </div>
 </div>
@@ -86,11 +77,8 @@
   const modalDate = document.getElementById('modal-date');
   const modalChip = document.getElementById('modal-chip');
   const modalDesc = document.getElementById('modal-desc');
-  const modalDelete = document.getElementById('modal-delete');
-  let activeTile = null;
 
   function openModal(tile) {
-    activeTile = tile;
     modalImg.src = tile.dataset.img;
     modalImg.alt = tile.dataset.alt || 'Hue Hunt submission';
     modalDate.textContent = tile.dataset.date;
@@ -105,7 +93,6 @@
     } else {
       modalChip.style.display = 'none';
     }
-    modalDelete.dataset.id = tile.dataset.id;
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
@@ -125,17 +112,6 @@
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
-  });
-
-  modalDelete.addEventListener('click', async () => {
-    if (!confirm('Delete this post? This cannot be undone.')) return;
-    const postId = modalDelete.dataset.id;
-    const res = await fetch(`/post/${postId}`, { method: 'DELETE' });
-    if (res.ok) {
-      window.location.reload();
-    } else {
-      alert('Could not delete post.');
-    }
   });
 </script>
 {% endblock %}

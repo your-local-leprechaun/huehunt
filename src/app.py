@@ -52,6 +52,21 @@ def profile():
     return render_template("profile.html", posts=posts)
 
 
+@app.route("/user/<username>")
+def user_profile(username):
+    from flask import abort, redirect, session, url_for
+    if not session.get("user_id"):
+        return redirect(url_for("auth.login"))
+    if session.get("username") == username:
+        return redirect(url_for("profile"))
+    result = model.get_user_by_username(username)
+    if not result:
+        abort(404)
+    user_id, user_data = result
+    posts = model.get_user_posts(user_id)
+    return render_template("user_profile.html", profile_user=user_data, posts=posts)
+
+
 @app.route("/profile/post/<post_id>")
 def post_detail(post_id):
     from flask import abort, redirect, session, url_for

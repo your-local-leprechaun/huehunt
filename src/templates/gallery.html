@@ -7,7 +7,11 @@
     {% for post in submissions %}
       <div class="feed-card">
         <div class="feed-card-header">
-          <span class="feed-username">{{ post.username or 'Anonymous' }}</span>
+          {% if post.username %}
+            <a href="/user/{{ post.username }}" class="feed-username">{{ post.username }}</a>
+          {% else %}
+            <span class="feed-username">Anonymous</span>
+          {% endif %}
           {% set chip_color = post.challenge or challenge.color_hex %}
           <span class="feed-color-chip" style="background-color: {{ chip_color }}; color: {{ chip_color | text_color }};">{{ chip_color }}</span>
           <span class="feed-date">{{ post.date.strftime('%b %d, %Y') if post.date else '' }}</span>

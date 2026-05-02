@@ -123,9 +123,12 @@
   }
 
   function capture() {
-    canvas.width  = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
+    const MAX = 1200;
+    const vw = video.videoWidth, vh = video.videoHeight;
+    const scale = Math.min(1, MAX / Math.max(vw, vh));
+    canvas.width  = Math.round(vw * scale);
+    canvas.height = Math.round(vh * scale);
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     stopStream();
     video.classList.add('hidden');
     canvas.classList.remove('hidden');
@@ -156,7 +159,7 @@
   });
 
   document.getElementById('camera-use').addEventListener('click', async () => {
-    const imageData = canvas.toDataURL('image/jpeg', 0.9);
+    const imageData = canvas.toDataURL('image/jpeg', 0.82);
     const altText   = document.getElementById('camera-alt').value.trim();
     const useBtn    = document.getElementById('camera-use');
 
