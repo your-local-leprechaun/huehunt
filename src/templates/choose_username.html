@@ -2,6 +2,10 @@
 {% block title %}Choose a Username — HueHunt{% endblock %}
 {% block header %}{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="auth-page">
   <a href="/" class="logo auth-logo">HueHunt</a>
@@ -19,10 +23,6 @@
         autocomplete="off"
         autofocus
       />
-      <label class="auth-checkbox">
-        <input type="checkbox" name="colorblind" value="1" />
-        <span>I experience colorblindness</span>
-      </label>
       <button type="submit" class="btn btn-primary" style="margin-top:0">Let's go</button>
     </form>
   </div>

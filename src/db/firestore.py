@@ -146,13 +146,6 @@ class model:
         )
         return new_streak
 
-    def set_colorblind_on_all_posts(self, user_id: str, value: bool) -> None:
-        batch = self.db.batch()
-        docs = self.db.collection("users").document(user_id).collection("posts").stream()
-        for doc in docs:
-            batch.update(doc.reference, {"colorblind": value})
-        batch.commit()
-
     def get_user_posts(self, user_id: str) -> list[dict]:
         docs = (
             self.db.collection("users")

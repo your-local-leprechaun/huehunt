@@ -75,5 +75,3 @@ def generate_challenge(for_date: date) -> dict:
     }
 
 
-def two_days_ago(for_date: date) -> str:
-    return (for_date - timedelta(days=2)).isoformat()

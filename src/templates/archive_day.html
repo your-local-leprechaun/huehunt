@@ -1,3 +1,4 @@
+{% from "macros.html" import feed_card %}
 {% extends "base.html" %}
 {% block title %}{{ archive_date | format_date }} — HueHunt{% endblock %}
 
@@ -16,27 +17,7 @@
 {% if submissions %}
   <div class="feed">
     {% for post in submissions %}
-      <div class="feed-card" style="border-color: {{ post.challenge or challenge.color_hex }}; border-width: 2px;">
-        <div class="feed-card-header">
-          {% if post.username %}
-            <a href="/user/{{ post.username }}" class="feed-username">{{ post.username }}</a>
-          {% else %}
-            <span class="feed-username">Anonymous</span>
-          {% endif %}
-          {% set chip_color = post.challenge or challenge.color_hex %}
-          <span class="feed-color-chip" style="background-color: {{ chip_color }}; color: {{ chip_color | text_color }};">{{ chip_color }}</span>
-          {% if post.colorblind %}<span class="colorblind-badge">👁 Colorblind</span>{% endif %}
-        </div>
-        <img
-          src="{{ post.image_url }}"
-          alt="{{ post.alt_text or 'HueHunt submission' }}"
-          class="feed-img"
-          loading="lazy"
-        />
-        {% if post.alt_text %}
-          <p class="feed-caption">{{ post.alt_text }}</p>
-        {% endif %}
-      </div>
+      {{ feed_card(post, challenge.color_hex, loop.index0) }}
     {% endfor %}
   </div>
 {% else %}

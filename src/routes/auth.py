@@ -18,8 +18,7 @@ def _validated_streak(user_data: dict) -> int:
     if not last:
         return 0
     yesterday = (date.today() - timedelta(days=1)).isoformat()
-    today = date.today().isoformat()
-    if last >= yesterday or last == today:
+    if last >= yesterday:
         return user_data.get("streak", 0)
     return 0
 
@@ -71,7 +70,6 @@ def email_signin():
     session["user_id"] = user_id
     session["username"] = user_data.get("username")
     session["streak"] = _validated_streak(user_data)
-    session["colorblind"] = user_data.get("colorblind", False)
     return redirect(url_for("index"))
 
 
@@ -85,7 +83,6 @@ def email_signup():
         flash("An account with that email already exists.", "error")
         return redirect(url_for("auth.login", tab="signup"))
 
-    colorblind = request.form.get("colorblind") == "1"
     user_id = str(uuid.uuid4())
     model.upsert_user(user_id, {
         "username": None,
@@ -93,13 +90,11 @@ def email_signup():
         "password": generate_password_hash(password),
         "streak": 0,
         "last_submitted_date": None,
-        "colorblind": colorblind,
     })
 
     session["user_id"] = user_id
     session["username"] = None
     session["streak"] = 0
-    session["colorblind"] = colorblind
     return redirect(url_for("auth.choose_username"))
 
 
@@ -124,11 +119,9 @@ def set_username():
         flash("Username cannot be empty.", "error")
         return redirect(url_for("auth.choose_username"))
 
-    colorblind = request.form.get("colorblind") == "1"
     from app import model
-    model.upsert_user(session["user_id"], {"username": username, "colorblind": colorblind})
+    model.upsert_user(session["user_id"], {"username": username})
     session["username"] = username
-    session["colorblind"] = colorblind
     return redirect(url_for("index"))
 
 
@@ -162,13 +155,11 @@ def google_callback():
         session["user_id"] = user_id
         session["username"] = None
         session["streak"] = 0
-        session["colorblind"] = False
         return redirect(url_for("auth.choose_username"))
 
     session["user_id"] = user_id
     session["username"] = existing.get("username")
     session["streak"] = _validated_streak(existing)
-    session["colorblind"] = existing.get("colorblind", False)
     return redirect(url_for("index"))
 
 

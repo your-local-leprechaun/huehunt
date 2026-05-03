@@ -95,17 +95,6 @@ def post_detail(post_id):
     return render_template("post_detail.html", post=post)
 
 
-@app.route("/profile/colorblind", methods=["POST"])
-def toggle_colorblind():
-    from flask import redirect, session, url_for
-    if not session.get("user_id"):
-        return redirect(url_for("auth.login"))
-    new_val = not session.get("colorblind", False)
-    model.upsert_user(session["user_id"], {"colorblind": new_val})
-    model.set_colorblind_on_all_posts(session["user_id"], new_val)
-    session["colorblind"] = new_val
-    return redirect(url_for("profile"))
-
 
 @app.route("/archive")
 def archive():

@@ -65,7 +65,6 @@ def submit():
         "challenge": challenge.get("color_hex"),
         "username": session.get("username"),
         "user_id": user_id,
-        "colorblind": session.get("colorblind", False),
     })
 
     new_streak = model.update_streak(user_id, today)
