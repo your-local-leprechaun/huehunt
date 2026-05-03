@@ -54,7 +54,7 @@ def submit():
 
     image_url = f"/image/{blob_name}"
 
-    today = date.today().isoformat()
+    today = data.get("local_date") or request.cookies.get("local_date") or date.today().isoformat()
     from app import model
     challenge = model.get_or_create_challenge(today)
     post_id = model.create_post(user_id, {
@@ -72,6 +72,7 @@ def submit():
     session["streak"] = new_streak
 
     return jsonify({"post_id": post_id, "image_url": image_url}), 200
+
 
 
 @submit_bp.route("/post/<post_id>", methods=["DELETE"])
@@ -99,7 +100,8 @@ def delete_post(post_id):
     if post.get("challenge_date") == today:
         user = model.get_user(user_id) or {}
         new_streak = max(0, user.get("streak", 1) - 1)
-        model.upsert_user(user_id, {"last_submitted_date": None, "streak": new_streak})
+        yesterday = (date.fromisoformat(today) - timedelta(days=1)).isoformat()
+        model.upsert_user(user_id, {"last_submitted_date": yesterday, "streak": new_streak})
         session["streak"] = new_streak
 
     return jsonify({"ok": True}), 200

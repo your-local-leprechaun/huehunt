@@ -7,7 +7,7 @@ class model:
         self.db = firestore.Client(database="huehunt-db")
 
     def get_or_create_challenge(self, today: str) -> dict:
-        from challenges import generate_challenge, two_days_ago
+        from challenges import generate_challenge
         from datetime import date
 
         ref = self.db.collection("challenges").document(today)
@@ -17,11 +17,17 @@ class model:
 
         challenge = generate_challenge(date.fromisoformat(today))
         ref.set(challenge)
-
-        stale = two_days_ago(date.fromisoformat(today))
-        self.db.collection("challenges").document(stale).delete()
-
         return challenge
+
+    def get_past_challenges(self) -> list[dict]:
+        from datetime import date
+        today = date.today().isoformat()
+        docs = self.db.collection("challenges").stream()
+        return sorted(
+            [doc.to_dict() for doc in docs if doc.id < today],
+            key=lambda c: c["date"],
+            reverse=True,
+        )
 
     def get_user(self, user_id: str) -> dict | None:
         doc = self.db.collection("users").document(user_id).get()
@@ -81,6 +87,16 @@ class model:
             .get()
         )
         return {"id": doc.id, **doc.to_dict()} if doc.exists else None
+
+    def get_submissions_for_date(self, date_str: str, limit: int = 50) -> list[dict]:
+        docs = (
+            self.db.collection_group("posts")
+            .where(filter=FieldFilter("challenge_date", "==", date_str))
+            .order_by("date", direction=firestore.Query.DESCENDING)
+            .limit(limit)
+            .stream()
+        )
+        return [{"id": doc.id, **doc.to_dict()} for doc in docs]
 
     def get_recent_submissions(self, limit: int = 50) -> list[dict]:
         docs = (

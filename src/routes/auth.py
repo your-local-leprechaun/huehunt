@@ -1,6 +1,7 @@
 import json
 import os
 import uuid
+from datetime import date, timedelta
 from pathlib import Path
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
@@ -9,6 +10,18 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 auth_bp = Blueprint("auth", __name__)
 oauth = OAuth()
+
+
+def _validated_streak(user_data: dict) -> int:
+    """Return 0 if the user missed a day, otherwise their stored streak."""
+    last = user_data.get("last_submitted_date")
+    if not last:
+        return 0
+    yesterday = (date.today() - timedelta(days=1)).isoformat()
+    today = date.today().isoformat()
+    if last >= yesterday or last == today:
+        return user_data.get("streak", 0)
+    return 0
 
 _client_id = os.environ.get("GOOGLE_CLIENT_ID")
 _client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
@@ -57,7 +70,7 @@ def email_signin():
 
     session["user_id"] = user_id
     session["username"] = user_data.get("username")
-    session["streak"] = user_data.get("streak", 0)
+    session["streak"] = _validated_streak(user_data)
     session["colorblind"] = user_data.get("colorblind", False)
     return redirect(url_for("index"))
 
@@ -154,7 +167,7 @@ def google_callback():
 
     session["user_id"] = user_id
     session["username"] = existing.get("username")
-    session["streak"] = existing.get("streak", 0)
+    session["streak"] = _validated_streak(existing)
     session["colorblind"] = existing.get("colorblind", False)
     return redirect(url_for("index"))
 

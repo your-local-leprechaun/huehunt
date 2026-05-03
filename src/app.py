@@ -107,6 +107,32 @@ def toggle_colorblind():
     return redirect(url_for("profile"))
 
 
+@app.route("/archive")
+def archive():
+    from flask import redirect, session, url_for
+    if not session.get("user_id"):
+        return redirect(url_for("auth.login"))
+    days = model.get_past_challenges()
+    return render_template("archive.html", days=days)
+
+
+@app.route("/archive/<date_str>")
+def archive_day(date_str):
+    from datetime import date
+    from flask import abort, redirect, session, url_for
+    if not session.get("user_id"):
+        return redirect(url_for("auth.login"))
+    try:
+        d = date.fromisoformat(date_str)
+    except ValueError:
+        abort(404)
+    if d >= date.today():
+        abort(404)
+    challenge = model.get_or_create_challenge(date_str)
+    submissions = model.get_submissions_for_date(date_str)
+    return render_template("archive_day.html", archive_date=date_str, challenge=challenge, submissions=submissions)
+
+
 @app.route("/about")
 def about():
     return render_template("about.html")

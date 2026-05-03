@@ -212,7 +212,7 @@
       const res = await fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData, alt_text: altText }),
+        body: JSON.stringify({ image: imageData, alt_text: altText, local_date: '{{ today }}' }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Upload failed');
