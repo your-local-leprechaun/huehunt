@@ -1,5 +1,5 @@
 import os
-from datetime import date, datetime, timezone
+from datetime import date
 
 import db
 from flask import Flask, render_template

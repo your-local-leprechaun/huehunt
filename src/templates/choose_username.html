@@ -1,17 +1,12 @@
-{% extends "base.html" %}
-{% block title %}Choose a Username — HueHunt{% endblock %}
-{% block header %}{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Choose a Username — HueHunt{%
+endblock %} {% block header %}{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+{% endblock %} {% block content %}
 <div class="auth-page">
   <a href="/" class="logo auth-logo">HueHunt</a>
   <p class="auth-tagline">One last thing — pick a username.</p>
 
-  <div class="auth-panel" style="margin-top: 0.5rem;">
+  <div class="auth-panel" style="margin-top: 0.5rem">
     <form action="/auth/set-username" method="post">
       <input
         class="auth-input"
@@ -23,7 +18,9 @@
         autocomplete="off"
         autofocus
       />
-      <button type="submit" class="btn btn-primary" style="margin-top:0">Let's go</button>
+      <button type="submit" class="btn btn-primary" style="margin-top: 0">
+        Let's go
+      </button>
     </form>
   </div>
 </div>

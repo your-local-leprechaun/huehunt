@@ -1,7 +1,5 @@
-{% extends "base.html" %}
-{% block title %}Post — HueHunt{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Post — HueHunt{% endblock %} {% block
+content %}
 <div class="post-detail">
   <a href="/profile" class="post-back">← Back</a>
 
@@ -18,12 +16,12 @@
       {{ post.date.strftime('%B %d, %Y') if post.date else '' }}
     </span>
     {% if post.challenge %}
-      <span class="post-detail-challenge">{{ post.challenge }}</span>
+    <span class="post-detail-challenge">{{ post.challenge }}</span>
     {% endif %}
   </div>
 
   {% if post.alt_text %}
-    <p class="post-detail-description">{{ post.alt_text }}</p>
+  <p class="post-detail-description">{{ post.alt_text }}</p>
   {% endif %}
 </div>
 {% endblock %}

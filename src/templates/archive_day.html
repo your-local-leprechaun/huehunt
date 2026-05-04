@@ -1,28 +1,31 @@
-{% from "macros.html" import feed_card %}
-{% extends "base.html" %}
-{% block title %}{{ archive_date | format_date }} — HueHunt{% endblock %}
-
-{% block content %}
+{% from "macros.html" import feed_card %} {% extends "base.html" %} {% block
+title %}{{ archive_date | format_date }} — HueHunt{% endblock %} {% block
+content %}
 <a href="/archive" class="home-about-link">← Back to Archive</a>
 
 <div class="archive-day-header">
-  <div class="archive-day-swatch" style="background-color: {{ challenge.color_hex }}; box-shadow: 0 0 32px {{ challenge.color_hex }}55;"></div>
+  <div
+    class="archive-day-swatch"
+    style="background-color: {{ challenge.color_hex }}; box-shadow: 0 0 32px {{ challenge.color_hex }}55;"
+  ></div>
   <div class="archive-day-meta">
     <p class="date-label">{{ archive_date | format_date('%B %d, %Y') }}</p>
     <p class="archive-day-prompt">{{ challenge.prompt }}</p>
-    <span class="feed-color-chip" style="background-color: {{ challenge.color_hex }}; color: {{ challenge.color_hex | text_color }};">{{ challenge.color_hex }}</span>
+    <span
+      class="feed-color-chip"
+      style="background-color: {{ challenge.color_hex }}; color: {{ challenge.color_hex | text_color }};"
+      >{{ challenge.color_hex }}</span
+    >
   </div>
 </div>
 
 {% if submissions %}
-  <div class="feed">
-    {% for post in submissions %}
-      {{ feed_card(post, challenge.color_hex, loop.index0) }}
-    {% endfor %}
-  </div>
+<div class="feed">
+  {% for post in submissions %} {{ feed_card(post, challenge.color_hex,
+  loop.index0) }} {% endfor %}
+</div>
 {% else %}
-  <div class="empty-state">
-    <p>No submissions for this day.</p>
-  </div>
-{% endif %}
-{% endblock %}
+<div class="empty-state">
+  <p>No submissions for this day.</p>
+</div>
+{% endif %} {% endblock %}

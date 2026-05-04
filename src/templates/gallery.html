@@ -1,21 +1,16 @@
-{% from "macros.html" import feed_card %}
-{% extends "base.html" %}
-{% block title %}Today's Gallery — HueHunt{% endblock %}
-
-{% block content %}
+{% from "macros.html" import feed_card %} {% extends "base.html" %} {% block
+title %}Today's Gallery — HueHunt{% endblock %} {% block content %}
 <div class="gallery-links">
   <a href="/about" class="home-about-link">More about HueHunt →</a>
   <a href="/archive" class="home-about-link">Color Archive →</a>
 </div>
 {% if submissions %}
-  <div class="feed">
-    {% for post in submissions %}
-      {{ feed_card(post, challenge.color_hex, loop.index0) }}
-    {% endfor %}
-  </div>
+<div class="feed">
+  {% for post in submissions %} {{ feed_card(post, challenge.color_hex,
+  loop.index0) }} {% endfor %}
+</div>
 {% else %}
-  <div class="empty-state">
-    <p>No other submissions yet — you might be first!</p>
-  </div>
-{% endif %}
-{% endblock %}
+<div class="empty-state">
+  <p>No other submissions yet — you might be first!</p>
+</div>
+{% endif %} {% endblock %}

@@ -1,42 +1,67 @@
-{% extends "base.html" %}
-{% block title %}Today's Challenge — HueHunt{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='camera.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Today's Challenge — HueHunt{%
+endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='camera.css') }}" />
+{% endblock %} {% block content %}
 <section class="challenge-card">
   <a href="/about" class="home-about-link">What is HueHunt? →</a>
   <p class="date-label">{{ today }}</p>
 
-  <div class="color-swatch" id="color-swatch" style="background-color: {{ challenge.color_hex }}; box-shadow: 0 0 20px {{ challenge.color_hex }}55;" title="Tap to fullscreen" role="button" tabindex="0"></div>
+  <div
+    class="color-swatch"
+    id="color-swatch"
+    style="background-color: {{ challenge.color_hex }}; box-shadow: 0 0 20px {{ challenge.color_hex }}55;"
+    title="Tap to fullscreen"
+    role="button"
+    tabindex="0"
+  ></div>
 </section>
 
-<div class="color-fullscreen hidden" id="color-fullscreen" style="background-color: {{ challenge.color_hex }};">
-  <span class="color-fullscreen-hint" style="color: {{ challenge.color_hex | text_color }}; opacity: 0.5;">Tap to close</span>
+<div
+  class="color-fullscreen hidden"
+  id="color-fullscreen"
+  style="background-color: {{ challenge.color_hex }};"
+>
+  <span
+    class="color-fullscreen-hint"
+    style="color: {{ challenge.color_hex | text_color }}; opacity: 0.5;"
+    >Tap to close</span
+  >
 </div>
 
 <section class="challenge-card">
   <h1 class="prompt-text">{{ challenge.prompt }}</h1>
   <p class="prompt-sub">Submit a photo matching today's color.</p>
 
-  {% if session.get('user_id') %}
-    {% if submitted %}
-      <a href="/" class="btn btn-primary">See today's gallery</a>
-      <p class="prompt-sub" style="margin-top:0.75rem">You've submitted today — nice work!</p>
-    {% else %}
-      <button class="btn-camera" id="open-camera" aria-label="Open camera">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
-          <circle cx="12" cy="13" r="3"/>
-        </svg>
-        Take a Photo
-      </button>
-      <p class="prompt-sub gallery-locked">📷 Submit your photo to unlock the gallery</p>
-    {% endif %}
+  {% if session.get('user_id') %} {% if submitted %}
+  <a href="/" class="btn btn-primary">See today's gallery</a>
+  <p class="prompt-sub" style="margin-top: 0.75rem">
+    You've submitted today — nice work!
+  </p>
   {% else %}
-    <a href="/login" class="btn btn-primary">Sign in to play</a>
+  <button class="btn-camera" id="open-camera" aria-label="Open camera">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"
+      />
+      <circle cx="12" cy="13" r="3" />
+    </svg>
+    Take a Photo
+  </button>
+  <p class="prompt-sub gallery-locked">
+    📷 Submit your photo to unlock the gallery
+  </p>
+  {% endif %} {% else %}
+  <a href="/login" class="btn btn-primary">Sign in to play</a>
   {% endif %}
 </section>
 
@@ -44,51 +69,120 @@
 <div class="camera-overlay hidden" id="camera-overlay" data-today="{{ today }}">
   <div class="camera-shell">
     <div class="camera-view" id="camera-view">
-      <video class="camera-feed" id="camera-feed" autoplay playsinline muted></video>
+      <video
+        class="camera-feed"
+        id="camera-feed"
+        autoplay
+        playsinline
+        muted
+      ></video>
       <canvas class="camera-canvas hidden" id="camera-canvas"></canvas>
     </div>
 
     <div class="camera-controls" id="controls-live">
-      <button class="cam-btn cam-btn--close" id="camera-close" aria-label="Close">✕</button>
-      <button class="cam-btn cam-btn--shutter" id="camera-shutter" aria-label="Take photo"></button>
+      <button
+        class="cam-btn cam-btn--close"
+        id="camera-close"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+      <button
+        class="cam-btn cam-btn--shutter"
+        id="camera-shutter"
+        aria-label="Take photo"
+      ></button>
       <div class="cam-side-btns">
-        <button class="cam-btn cam-btn--rotate" id="camera-rotate" aria-label="Rotate view">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
-            <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+        <button
+          class="cam-btn cam-btn--rotate"
+          id="camera-rotate"
+          aria-label="Rotate view"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 2v6h-6" />
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+            <path d="M3 22v-6h6" />
+            <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
           </svg>
         </button>
-        <button class="cam-btn cam-btn--flip" id="camera-flip" aria-label="Flip camera">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/>
-            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
-            <path d="m8 13 4-4 4 4"/><path d="M12 9v8"/>
+        <button
+          class="cam-btn cam-btn--flip"
+          id="camera-flip"
+          aria-label="Flip camera"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+            <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+            <path d="m8 13 4-4 4 4" />
+            <path d="M12 9v8" />
           </svg>
         </button>
       </div>
     </div>
 
-    <div class="camera-controls camera-controls--preview hidden" id="controls-preview">
-      <input class="camera-alt-input" id="camera-alt" type="text" placeholder="Describe your photo…" maxlength="120" autocomplete="off" />
+    <div
+      class="camera-controls camera-controls--preview hidden"
+      id="controls-preview"
+    >
+      <input
+        class="camera-alt-input"
+        id="camera-alt"
+        type="text"
+        placeholder="Describe your photo…"
+        maxlength="120"
+        autocomplete="off"
+      />
       <div class="camera-preview-actions">
-        <button class="cam-btn cam-btn--retake" id="camera-retake">Retake</button>
+        <button class="cam-btn cam-btn--retake" id="camera-retake">
+          Retake
+        </button>
         <button class="cam-btn cam-btn--use" id="camera-use">Submit</button>
       </div>
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-  const swatch = document.getElementById('color-swatch');
-  const fullscreen = document.getElementById('color-fullscreen');
-  function openFullscreen() { fullscreen.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-  function closeFullscreen() { fullscreen.classList.add('hidden'); document.body.style.overflow = ''; }
-  swatch.addEventListener('click', openFullscreen);
-  swatch.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openFullscreen(); });
-  fullscreen.addEventListener('click', closeFullscreen);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFullscreen(); });
+  const swatch = document.getElementById("color-swatch");
+  const fullscreen = document.getElementById("color-fullscreen");
+  function openFullscreen() {
+    fullscreen.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+  function closeFullscreen() {
+    fullscreen.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+  swatch.addEventListener("click", openFullscreen);
+  swatch.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") openFullscreen();
+  });
+  fullscreen.addEventListener("click", closeFullscreen);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeFullscreen();
+  });
 </script>
 <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
 {% endblock %}

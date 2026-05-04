@@ -1,17 +1,33 @@
-{% extends "base.html" %}
-{% block title %}{{ session['username'] }} — HueHunt{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ session['username'] }} — HueHunt{%
+endblock %} {% block content %}
 <div class="profile-header">
   <div class="profile-info">
     <h1 class="profile-username">{{ session['username'] }}</h1>
-    <span class="profile-streak">🔥 {{ session.get('streak', 0) }} day streak</span>
+    <span class="profile-streak"
+      >🔥 {{ session.get('streak', 0) }} day streak</span
+    >
   </div>
-  <a href="/logout" class="btn-logout" aria-label="Log out" title="Log out" style="margin-left:auto">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-      <polyline points="16 17 21 12 16 7"/>
-      <line x1="21" y1="12" x2="9" y2="12"/>
+  <a
+    href="/logout"
+    class="btn-logout"
+    aria-label="Log out"
+    title="Log out"
+    style="margin-left: auto"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
     </svg>
   </a>
 </div>
@@ -24,33 +40,37 @@
 </div>
 
 {% if posts %}
-  <div class="post-grid">
-    {% for post in posts %}
-      <button
-        class="post-tile"
-        style="outline: 3px solid {{ post.challenge or '#e8ff4d' }}; outline-offset: -3px;"
-        data-id="{{ post.id }}"
-        data-img="{{ post.image_url }}"
-        data-alt="{{ post.alt_text or '' }}"
-        data-date="{{ post.challenge_date | format_date }}"
-        data-challenge="{{ post.challenge or '' }}"
-      >
-        <img src="{{ post.image_url }}" alt="{{ post.alt_text or 'HueHunt submission' }}" class="post-img" loading="lazy" />
-        <div class="post-tile-meta">{{ post.challenge_date | format_date('%b %d') }}</div>
-      </button>
-    {% endfor %}
-  </div>
+<div class="post-grid">
+  {% for post in posts %}
+  <button
+    class="post-tile"
+    style="outline: 3px solid {{ post.challenge or '#e8ff4d' }}; outline-offset: -3px;"
+    data-id="{{ post.id }}"
+    data-img="{{ post.image_url }}"
+    data-alt="{{ post.alt_text or '' }}"
+    data-date="{{ post.challenge_date | format_date }}"
+    data-challenge="{{ post.challenge or '' }}"
+  >
+    <img
+      src="{{ post.image_url }}"
+      alt="{{ post.alt_text or 'HueHunt submission' }}"
+      class="post-img"
+      loading="lazy"
+    />
+    <div class="post-tile-meta">
+      {{ post.challenge_date | format_date('%b %d') }}
+    </div>
+  </button>
+  {% endfor %}
+</div>
 {% else %}
-  <div class="empty-state">
-    <p>No posts yet.</p>
-    <a href="/" class="btn btn-primary" style="margin-top:1rem">Take today's photo</a>
-  </div>
-{% endif %}
-
-{% set show_delete = true %}
-{% include '_modal.html' %}
-{% endblock %}
-
-{% block scripts %}
+<div class="empty-state">
+  <p>No posts yet.</p>
+  <a href="/" class="btn btn-primary" style="margin-top: 1rem"
+    >Take today's photo</a
+  >
+</div>
+{% endif %} {% set show_delete = true %} {% include '_modal.html' %} {% endblock
+%} {% block scripts %}
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 {% endblock %}

@@ -3,7 +3,7 @@ import os
 import uuid
 from datetime import date, datetime, timedelta, timezone
 
-from flask import Blueprint, jsonify, make_response, redirect, request, session
+from flask import Blueprint, jsonify, make_response, request, session
 from google.cloud import storage
 
 submit_bp = Blueprint("submit", __name__)

@@ -1,16 +1,23 @@
-{% extends "base.html" %}
-{% block title %}Archive — HueHunt{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Archive — HueHunt{% endblock %} {%
+block content %}
 <div class="archive-header">
   <h1 class="archive-title">Archive</h1>
   <p class="archive-subtitle">Every color, every day.</p>
 </div>
 <div class="archive-grid">
   {% for day in days %}
-    <a href="/archive/{{ day.date }}" class="archive-tile" style="background-color: {{ day.color_hex }};" title="{{ day.date | format_date }}">
-      <span class="archive-tile-date" style="color: {{ day.color_hex | text_color }};">{{ day.date | format_date('%b %d') }}</span>
-    </a>
+  <a
+    href="/archive/{{ day.date }}"
+    class="archive-tile"
+    style="background-color: {{ day.color_hex }};"
+    title="{{ day.date | format_date }}"
+  >
+    <span
+      class="archive-tile-date"
+      style="color: {{ day.color_hex | text_color }};"
+      >{{ day.date | format_date('%b %d') }}</span
+    >
+  </a>
   {% endfor %}
 </div>
 {% endblock %}

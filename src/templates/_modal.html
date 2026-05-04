@@ -1,7 +1,9 @@
 <div class="post-modal hidden" id="post-modal" role="dialog" aria-modal="true">
   <div class="post-modal-backdrop" id="modal-backdrop"></div>
   <div class="post-modal-card" id="modal-card">
-    <button class="post-modal-close" id="modal-close" aria-label="Close">✕</button>
+    <button class="post-modal-close" id="modal-close" aria-label="Close">
+      ✕
+    </button>
     <img src="" alt="" class="post-modal-img" id="modal-img" />
     <div class="post-modal-body">
       <div class="post-detail-meta">
@@ -10,7 +12,7 @@
       </div>
       <p class="post-detail-description" id="modal-desc"></p>
       {% if show_delete %}
-        <button class="btn-delete" id="modal-delete">Delete post</button>
+      <button class="btn-delete" id="modal-delete">Delete post</button>
       {% endif %}
     </div>
   </div>
