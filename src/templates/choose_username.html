@@ -1,6 +1,8 @@
+{# One-time username selection shown after first sign-in (email or Google OAuth).
+   Skipped on subsequent logins once a username is set. #}
 {% extends "base.html" %} {% block title %}Choose a Username — HueHunt{%
 endblock %} {% block header %}{% endblock %} {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
 {% endblock %} {% block content %}
 <div class="auth-page">
   <a href="/" class="logo auth-logo">HueHunt</a>

@@ -1,3 +1,4 @@
+{# Static about page explaining what HueHunt is. No dynamic data. #}
 {% extends "base.html" %} {% block title %}About — HueHunt{% endblock %} {%
 block content %}
 <div class="about-page">
@@ -12,68 +13,44 @@ block content %}
   <div class="about-section">
     <h2 class="about-heading">What is HueHunt?</h2>
     <p>
-      Every day, a single hex color drops. Your job is to go find something in
-      the real world that matches it — as <em>you</em> see it. Snap a picture,
-      submit it, and see how everyone else interpreted the same color. Just
-      remember you can't see anyone else's perspective till you post your own!
+      Every day, a new color gets picked. Your job is to go find something in
+      the real world that matches it, as <em>you</em> see it. Snap a photo,
+      submit it, and see how everyone else interpreted the same color. You won't
+      see anyone else's until you post your own though!
     </p>
-    <p>One color interpreted in unique ways.</p>
+    <p>One color, a hundred different ways of seeing it.</p>
   </div>
 
   <div class="about-section">
-    <h2 class="about-heading">A new appreciation for color</h2>
-    <p>
-      Most of us move through the world without really looking at it. We see a
-      park bench, a coffee cup, a brick wall — but we don't notice the exact
-      warm terracotta of the brick, or the particular muted grey-green of the
-      bench paint peeling in the corner.
-    </p>
-    <p>
-      HueHunt gives you a reason to stop and look. When you're hunting for a
-      specific color, everything becomes worth a second glance. You start
-      noticing the subtle differences between shades, the way light changes a
-      color entirely, the surprising places color hides. It's a small shift in
-      attention that changes how you experience the world around you.
-    </p>
+    <h2 class="about-heading">How it Works</h2>
+    <ol class="about-steps">
+      <li>A new color is generated every day, the same one for everyone.</li>
+      <li>Go find something in the real world that matches it and take a photo.</li>
+      <li>Submit your photo to unlock the gallery and see everyone else's take.</li>
+      <li>Come back tomorrow to keep your streak alive.</li>
+    </ol>
   </div>
 
   <div class="about-section">
-    <h2 class="about-heading">Why gamification works</h2>
-    <div class="about-features">
-      <div class="about-feature">
-        <span class="about-feature-icon">🎯</span>
-        <div>
-          <strong>A daily reason to explore</strong>
-          <p>
-            The challenge gives you something specific to look for every single
-            day. It turns an ordinary walk into a hunt, and an ordinary
-            environment into somewhere worth exploring.
-          </p>
-        </div>
-      </div>
-      <div class="about-feature">
-        <span class="about-feature-icon">🔥</span>
-        <div>
-          <strong>Streaks build habits</strong>
-          <p>
-            The streak mechanic keeps you coming back — and consistency is
-            exactly how you train a sharper eye. The longer you play, the more
-            naturally you start noticing color everywhere.
-          </p>
-        </div>
-      </div>
-      <div class="about-feature">
-        <span class="about-feature-icon">👀</span>
-        <div>
-          <strong>The gallery changes how you see the challenge</strong>
-          <p>
-            Seeing fifty different photos of the same hex code shows you just
-            how much interpretation goes into color perception. It makes you
-            want to look harder next time.
-          </p>
-        </div>
-      </div>
-    </div>
+    <h2 class="about-heading">Gamifying Exploration and Appreciation</h2>
+    <p>
+      Most of us move through the world without really looking at it. HueHunt is
+      built around the idea that a small, specific challenge is all it takes to
+      change that. When you're hunting for a color, everything becomes worth a
+      second glance. The warm terracotta of a brick wall, the grey-green of
+      peeling bench paint, the way afternoon light completely changes a color you
+      thought you knew. It's a small shift in attention, but it adds up.
+    </p>
+    <p>
+      The daily challenge gives you a reason to go looking every single day,
+      turning an ordinary walk into something worth paying attention to. Streaks
+      reward you for showing up consistently, because that's exactly how you
+      build a sharper eye over time. The gallery is locked until you submit your
+      own photo, so your take on the color stays uninfluenced. And then once it
+      opens up, seeing how differently everyone interpreted the exact same hex
+      code is genuinely surprising every time. It makes you want to go out and
+      try again tomorrow.
+    </p>
   </div>
 
   <div class="about-cta">

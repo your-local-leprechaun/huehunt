@@ -1,3 +1,6 @@
+{# Base layout inherited by every page. Defines the HTML shell, global nav, and
+   three overridable blocks: title, extra_css (for page-specific stylesheets),
+   header (set to empty to hide the nav), and content. #}
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,17 +9,17 @@
     <title>{% block title %}HueHunt{% endblock %}</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="{{ url_for('static', filename='css/style.css') }}"
     />
     {% block extra_css %}{% endblock %}
     <link
       rel="icon"
       type="image/svg+xml"
-      href="{{ url_for('static', filename='HueHunt-Favicon.svg') }}"
+      href="{{ url_for('static', filename='icons/HueHunt-Favicon.svg') }}"
     />
     <link
       rel="apple-touch-icon"
-      href="{{ url_for('static', filename='HueHunt-IOS.png') }}"
+      href="{{ url_for('static', filename='icons/HueHunt-IOS.png') }}"
     />
     <link
       rel="manifest"

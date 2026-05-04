@@ -9,9 +9,13 @@
   if (!document.getElementById("open-camera")) return;
 
   let stream = null;
-  let facingMode = "environment";
+  let facingMode = "environment"; // start on rear camera
   let rotation = 0;
 
+  /**
+   * Applies the current rotation to the video element, scaling it up to fill
+   * the container without letterboxing when rotated 90/270 degrees.
+   */
   function applyVideoRotation() {
     if (rotation % 180 !== 0) {
       const cw = video.parentElement.offsetWidth;
@@ -25,6 +29,10 @@
     }
   }
 
+  /**
+   * Requests camera access and starts the live video stream.
+   * Shows the live controls and hides the preview canvas.
+   */
   async function startCamera() {
     try {
       stream = await navigator.mediaDevices.getUserMedia({
@@ -43,6 +51,9 @@
     }
   }
 
+  /**
+   * Stops all active media tracks and clears the stream reference.
+   */
   function stopStream() {
     if (stream) {
       stream.getTracks().forEach((t) => t.stop());
@@ -50,11 +61,19 @@
     }
   }
 
+  /**
+   * Stops the stream and hides the camera overlay.
+   */
   function closeCamera() {
     stopStream();
     overlay.classList.add("hidden");
   }
 
+  /**
+   * Captures the current video frame onto the canvas, applying rotation and
+   * scaling down to a max of 1200px on the longest side to limit upload size.
+   * Switches the UI from live view to preview mode.
+   */
   function capture() {
     const MAX = 1200;
     const vw = video.videoWidth,
@@ -91,21 +110,22 @@
     .getElementById("camera-retake")
     .addEventListener("click", startCamera);
 
-  document.getElementById("camera-rotate").addEventListener("click", () => {
-    rotation = rotation === 0 ? 90 : 0;
-    applyVideoRotation();
-  });
-
+  // Switches between rear ("environment") and front ("user") camera
   document.getElementById("camera-flip").addEventListener("click", () => {
     facingMode = facingMode === "environment" ? "user" : "environment";
     stopStream();
     startCamera();
   });
 
+  // Allow pressing Enter in the alt text field to submit
   document.getElementById("camera-alt").addEventListener("keydown", (e) => {
     if (e.key === "Enter") document.getElementById("camera-use").click();
   });
 
+  /**
+   * Encodes the canvas as a JPEG and POSTs it to /submit along with the alt
+   * text and today's date. Reloads the page on success to show the gallery.
+   */
   document.getElementById("camera-use").addEventListener("click", async () => {
     const imageData = canvas.toDataURL("image/jpeg", 0.82);
     const altText = document.getElementById("camera-alt").value.trim();

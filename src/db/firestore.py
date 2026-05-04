@@ -1,5 +1,7 @@
 from google.cloud import firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
+from challenges import generate_challenge
+from datetime import date, datetime, timezone, timedelta
 
 
 class model:
@@ -13,9 +15,6 @@ class model:
         :param today: ISO date string (e.g. "2026-05-03"), used as the Firestore document ID.
         :returns: The challenge document as a dict with keys such as "date", "color", and "hex".
         """
-        from challenges import generate_challenge
-        from datetime import date
-
         ref = self.db.collection("challenges").document(today)
         doc = ref.get()
         if doc.exists:
@@ -31,7 +30,6 @@ class model:
 
         :returns: List of challenge dicts, each containing at minimum a "date" key.
         """
-        from datetime import date
         today = date.today().isoformat()
         docs = self.db.collection("challenges").stream()
         return sorted(
@@ -86,7 +84,10 @@ class model:
 
     def upsert_user(self, user_id: str, data: dict) -> None:
         """
-        Create or merge-update a user document.
+        Create or partially update a user document without overwriting unspecified fields.
+
+        Using merge=True means this is safe for both first-time sign-in and partial
+        updates (e.g. setting a username) without needing to check existence first.
 
         :param user_id: The Firestore document ID to write to.
         :param data: Fields to set or update on the user document.
@@ -98,7 +99,9 @@ class model:
         Add a new post to the user's posts subcollection.
 
         :param user_id: The Firestore document ID of the submitting user.
-        :param data: Post fields (e.g. "challenge_date", "date", "blob_name").
+        :param data: Post fields — "date" (UTC datetime), "challenge_date" (ISO date string),
+            "image_url" (served image path), "alt_text" (user-provided description),
+            "challenge" (hex color string), "username", and "user_id".
         :returns: The auto-generated Firestore document ID of the new post.
         """
         _, ref = (
@@ -158,7 +161,7 @@ class model:
         )
         return [{"id": doc.id, **doc.to_dict()} for doc in docs]
 
-    def get_recent_submissions(self, limit: int = 50) -> list[dict]:
+    def get_recent_submissions(self, limit: int = 25) -> list[dict]:
         """
         Return the most recent submissions across all users.
 
@@ -184,7 +187,6 @@ class model:
         :param today: ISO date string for the current day (e.g. "2026-05-03").
         :returns: True if the user has at least one submission for today, False otherwise.
         """
-        from datetime import datetime, timezone
         docs = list(
             self.db.collection("users")
             .document(user_id)
@@ -195,6 +197,8 @@ class model:
         )
         if docs:
             return True
+        # Fallback for older posts without challenge_date: check if any post's timestamp
+        # falls within today's UTC window (midnight to 23:59:59).
         day_start = datetime.fromisoformat(today).replace(tzinfo=timezone.utc)
         day_end = datetime(day_start.year, day_start.month, day_start.day, 23, 59, 59, tzinfo=timezone.utc)
         docs = list(
@@ -216,7 +220,6 @@ class model:
         :param today: ISO date string for the current day (e.g. "2026-05-03").
         :returns: The updated streak count after this submission.
         """
-        from datetime import date, timedelta
         yesterday = (date.fromisoformat(today) - timedelta(days=1)).isoformat()
         user = self.get_user(user_id) or {}
         current = user.get("streak", 0)

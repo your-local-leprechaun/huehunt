@@ -1,3 +1,6 @@
+{# Jinja2 macros — reusable template snippets imported by other templates.
+   Import individual macros with: {% from "macros.html" import macro_name %}
+   Currently defines: feed_card (post grid tile), google_icon (SVG). #}
 {% macro feed_card(post, fallback_color, idx=0) %} {% set chip_color =
 post.challenge or fallback_color %}
 <div

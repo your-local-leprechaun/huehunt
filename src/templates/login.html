@@ -1,7 +1,10 @@
+{# Sign in / sign up page. Contains two tabs (signin, signup) toggled by auth.js.
+   Supports email/password and Google OAuth. Pass ?tab=signup in the URL to open
+   the signup tab directly. #}
 {% from "macros.html" import google_icon %} {% extends "base.html" %} {% block
 title %}Sign In — HueHunt{% endblock %} {% block header %}{% endblock %} {%
 block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
 {% endblock %} {% block content %}
 <div class="auth-page">
   <a href="/" class="logo auth-logo">HueHunt</a>

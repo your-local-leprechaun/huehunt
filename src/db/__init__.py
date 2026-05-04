@@ -1,4 +1,5 @@
-from .firestore import model
+from .firestore import model as _Model
 
-def get_model():
-    return model()
+# Singleton instance shared across app.py and all route blueprints.
+# Importing from here (rather than from app.py) avoids circular imports.
+instance = _Model()

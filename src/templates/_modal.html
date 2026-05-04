@@ -1,3 +1,6 @@
+{# Reusable post modal component. Included via {% include '_modal.html' %} on any
+   page that displays a post grid. Populated dynamically by modal.js when a post
+   tile is clicked — not rendered with server-side data directly. #}
 <div class="post-modal hidden" id="post-modal" role="dialog" aria-modal="true">
   <div class="post-modal-backdrop" id="modal-backdrop"></div>
   <div class="post-modal-card" id="modal-card">

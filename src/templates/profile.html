@@ -1,3 +1,5 @@
+{# The logged-in user's own profile page. Shows their submission history, streak,
+   and a delete button on each post. Only accessible to the post owner. #}
 {% extends "base.html" %} {% block title %}{{ session['username'] }} — HueHunt{%
 endblock %} {% block content %}
 <div class="profile-header">

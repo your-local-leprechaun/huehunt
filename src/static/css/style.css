@@ -576,6 +576,17 @@ a.feed-username:hover {
   line-height: 1.7;
   font-size: 0.95rem;
 }
+.about-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-left: 1.25rem;
+}
+.about-steps li {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
 .about-section em {
   color: var(--text);
   font-style: italic;

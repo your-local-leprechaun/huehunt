@@ -116,3 +116,7 @@ Also update the service account name in the `deploy` target:
 ```
 
 Replace `huehunt-runner` with the name of the service account you created in your GCP project.
+
+---
+
+This project was created for the **2026 Southern Oregon University Hackathon**
